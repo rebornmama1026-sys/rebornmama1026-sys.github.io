@@ -1,19 +1,412 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>Reborn Mama</title>
-<style>
-body { font-family: sans-serif; text-align: center; padding: 50px; background: #fdf3f3; }
-h1 { color: #b76e79; font-size: 36px; }
-p { font-size: 18px; color: #555; }
-footer { margin-top: 100px; color: #999; font-size: 14px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reborn Mama Postnatal Care Centre</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+        :root{--cream:#FFF9F0;--beige:#F8EAD8;--rose:#D9A78B;--text:#5C4A3C;--light:#8B7968;}
+        body{background:var(--cream);color:var(--text);line-height:1.7;}
+        
+        /* ===== FIXED LANGUAGE SWITCHER ===== */
+        .lang-top{position:fixed;top:15px;right:20px;z-index:100;background:#fff;border-radius:50px;box-shadow:0 2px 10px rgba(0,0,0,.08);display:flex;}
+        .lang-top button{padding:8px 16px;border:none;background:transparent;cursor:pointer;color:var(--light);border-radius:50px;font-size:14px;transition:all 0.2s ease;}
+        .lang-top button.active{background:var(--rose);color:#fff;}
+
+        /* ===== FIXED LANGUAGE VISIBILITY RULES ===== */
+        .zh { display: block; }
+        .en { display: none; }
+
+        body.lang-en .zh { display: none !important; }
+        body.lang-en .en { display: block !important; }
+
+        /* 导航 */
+        nav{position:fixed;top:0;width:100%;background:rgba(255,249,240,.95);backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,.05);z-index:99;}
+        .nav-inner{max-width:1100px;margin:0 auto;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;}
+        .logo{font-size:20px;font-weight:600;color:var(--rose);}
+        .nav-links a{color:var(--text);text-decoration:none;margin-left:18px;font-size:15px;}
+        .nav-links a:hover{color:var(--rose);}
+
+        /* 内容区 */
+        section{max-width:1100px;margin:0 auto;padding:60px 20px;}
+        h2{font-size:28px;text-align:center;margin-bottom:10px;}
+        .sub{text-align:center;color:var(--light);margin-bottom:40px;}
+        
+        /* 首页 */
+        .hero{padding:100px 20px 80px;text-align:center;background:linear-gradient(180deg,var(--cream),var(--beige));border-radius:0 0 30px 30px;margin-top:60px;}
+        .hero h1{font-size:36px;margin-bottom:20px;line-height:1.3;}
+        .hero h1 span{color:var(--rose);}
+        .hero p{max-width:700px;margin:0 auto 30px;color:var(--light);font-size:17px;}
+        
+        /* 按钮 */
+        .btn{display:inline-block;padding:12px 28px;border-radius:50px;text-decoration:none;font-weight:500;margin:5px;transition:.3s;border:none;cursor:pointer;}
+        .btn1{background:var(--rose);color:#fff;}
+        .btn1:hover{background:#C49476;}
+        .btn2{border:2px solid var(--rose);color:var(--rose);}
+        .btn2:hover{background:var(--rose);color:#fff;}
+        .btn3{background:#25D366;color:#fff;}
+        .btn3:hover{background:#1fb85a;}
+
+        /* 卡片布局 */
+        .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+        .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+        .card{background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.04);}
+        .card h3{color:var(--rose);margin-bottom:12px;font-size:18px;}
+        .card p{color:var(--light);font-size:15px;}
+        
+        /* 套餐 */
+        .pkg-card{background:#fff;padding:28px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.04);position:relative;}
+        .pkg-card.featured{border:3px solid var(--rose);transform:scale(1.02);}
+        .pkg-card h3{color:var(--rose);font-size:20px;margin-bottom:8px;}
+        .price{font-size:28px;font-weight:700;margin:12px 0;}
+        .price small{color:var(--light);text-decoration:line-through;font-weight:normal;font-size:16px;}
+        .pkg-card ul{list-style:none;margin:16px 0;}
+        .pkg-card li{padding:6px 0;border-bottom:1px solid var(--cream);font-size:15px;}
+        .tag{position:absolute;top:15px;right:-25px;background:var(--rose);color:#fff;font-size:12px;padding:3px 25px;transform:rotate(45deg);}
+
+        /* 四阶段 */
+        .phase{text-align:center;}
+        .phase .icon{font-size:32px;margin-bottom:8px;}
+        
+        /* 环境展示 */
+        .env-item{background:var(--beige);border-radius:12px;padding:20px 10px;text-align:center;}
+        
+        /* FAQ */
+        .faq-item{background:#fff;padding:20px;border-radius:12px;margin-bottom:12px;}
+        .faq-item h4{font-size:16px;margin-bottom:6px;}
+        .faq-item p{color:var(--light);font-size:15px;}
+        
+        /* 联系我们 */
+        .contact-box{background:var(--beige);border-radius:20px;padding:40px;text-align:center;}
+        .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-top:30px;}
+        
+        /* 页脚 */
+        footer{background:var(--beige);text-align:center;padding:30px 20px;color:var(--light);font-size:14px;margin-top:40px;}
+        
+        /* ===== FIXED MOBILE LAYOUT ===== */
+        @media(max-width:900px){
+            .grid3,.grid4{grid-template-columns:1fr;}
+            .nav-links{display:none;}
+            .lang-top{right:15px;top:10px;}
+            .hero h1{font-size:28px;}
+        }
+    </style>
 </head>
-<body>
-<h1>🌸 Reborn Mama</h1>
-<p>欢迎来到 Reborn Mama！</p>
-<p>重生 · 成长 · 温柔而坚定 💛</p>
-<footer>© 2026 Reborn Mama</footer>
+<body id="page-body">
+
+<!-- 语言切换 - FIXED IDs -->
+<div class="lang-top">
+    <button id="btn-zh" class="active">中文</button>
+    <button id="btn-en">English</button>
+</div>
+
+<!-- 导航 -->
+<nav>
+    <div class="nav-inner">
+        <div class="logo">Reborn Mama</div>
+        <div class="nav-links">
+            <a href="#home" class="zh">首页</a><a href="#about" class="zh">关于我们</a><a href="#services" class="zh">服务</a><a href="#cuisine" class="zh">月子餐</a><a href="#env" class="zh">环境</a><a href="#packages" class="zh">套餐</a><a href="#contact" class="zh">联系</a>
+            <a href="#home" class="en">Home</a><a href="#about" class="en">About</a><a href="#services" class="en">Services</a><a href="#cuisine" class="en">Cuisine</a><a href="#env" class="en">Environment</a><a href="#packages" class="en">Packages</a><a href="#contact" class="en">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- 首页 -->
+<div class="hero" id="home">
+    <h1 class="zh">妈妈焕然新生，<br><span>宝宝舒适安然</span></h1>
+    <h1 class="en">Mom Reborn, <br><span>Baby Comfort</span></h1>
+    
+    <p class="zh">28天温馨月子之旅，让妈妈安心恢复，让宝宝在爱与关怀中健康成长。低密度 · 科学照护 · 专业产康。</p>
+    <p class="en">Experience 28 days of comfort, care and personalised postpartum support. Boutique Comfort · Evidence-Informed Care · Professional Postnatal Recovery.</p>
+    
+    <a href="#contact" class="btn btn1 zh">📅 预约参观</a>
+    <a href="#packages" class="btn btn2 zh">🍼 查看套餐</a>
+    <a href="#" class="btn btn3 zh">💬 WhatsApp</a>
+    
+    <a href="#contact" class="btn btn1 en">📅 Book a Tour</a>
+    <a href="#packages" class="btn btn2 en">🍼 View Packages</a>
+    <a href="#" class="btn btn3 en">💬 WhatsApp</a>
+</div>
+
+<!-- 关于我们 -->
+<section id="about">
+    <h2 class="zh">关于我们</h2>
+    <p class="sub zh">不只是月子中心，更是妈妈重新绽放的起点</p>
+    <h2 class="en">About Us</h2>
+    <p class="sub en">More Than Confinement Care — A New Beginning for Every Mother</p>
+    
+    <p class="zh" style="text-align:center;max-width:800px;margin:0 auto;color:var(--light);">Reborn Mama 位于马来西亚柔佛新山，是一家精品月子中心。我们以「低密度 · 科学照护 · 专业产康」为理念，打造温馨、私密、舒适的月子环境。</p>
+    <p class="en" style="text-align:center;max-width:800px;margin:0 auto;color:var(--light);">Reborn Mama is a boutique confinement centre in Johor Bahru, Malaysia. We provide a warm, peaceful and personalised environment guided by our core philosophy.</p>
+</section>
+
+<!-- 服务 -->
+<section id="services" style="background:#fff;border-radius:20px;margin:0 1rem;">
+    <h2 class="zh">我们的服务</h2>
+    <p class="sub zh">细致呵护，从妈妈到宝宝</p>
+    <h2 class="en">Our Services</h2>
+    <p class="sub en">Thoughtful Care for Both Mother & Baby</p>
+    
+    <div class="grid3">
+        <div class="card">
+            <h3 class="zh">📋 产后身体评估</h3>
+            <h3 class="en">📋 Postnatal Assessment</h3>
+            <p class="zh">个性化评估腹直肌、骨盆及整体恢复，提供专业建议。</p>
+            <p class="en">Personalised assessment and recovery recommendations.</p>
+        </div>
+        <div class="card">
+            <h3 class="zh">💆 专业产康护理</h3>
+            <h3 class="en">💆 Recovery Care</h3>
+            <p class="zh">经络舒缓、腹部骨盆护理及仪器辅助调养。</p>
+            <p class="en">Body relaxation, abdominal & pelvic wellness treatments.</p>
+        </div>
+        <div class="card">
+            <h3 class="zh">🤱 哺乳支持</h3>
+            <h3 class="en">🤱 Lactation Support</h3>
+            <p class="zh">姿势指导、乳房护理，解决常见哺乳问题。</p>
+            <p class="en">Breastfeeding guidance and problem-solving support.</p>
+        </div>
+        <div class="card">
+            <h3 class="zh">🧸 新生儿照护</h3>
+            <h3 class="en">🧸 Newborn Care</h3>
+            <p class="zh">喂养、洗澡、日常卫生，让妈妈安心休息。</p>
+            <p class="en">Feeding, bathing and daily care — giving Mum time to rest.</p>
+        </div>
+        <div class="card">
+            <h3 class="zh">🍽️ 28天月子膳食</h3>
+            <h3 class="en">🍽️ Confinement Cuisine</h3>
+            <p class="zh">清调补固四阶段，每日5餐，营养滋补。</p>
+            <p class="en">5 meals daily across 4 nourishment phases.</p>
+        </div>
+        <div class="card">
+            <h3 class="zh">📚 育儿课程</h3>
+            <h3 class="en">📚 Parenting Workshops</h3>
+            <p class="zh">新生儿护理、母乳喂养，新手妈妈更有信心。</p>
+            <p class="en">Build confidence in caring for your newborn.</p>
+        </div>
+    </div>
+</section>
+
+<!-- 月子膳食 -->
+<section id="cuisine">
+    <h2 class="zh">28天月子膳食</h2>
+    <p class="sub zh">清 · 调 · 补 · 固 | 一日五餐，温柔滋养</p>
+    <h2 class="en">28-Day Confinement Cuisine</h2>
+    <p class="sub en">Gentle · Balanced · Nourishing · Sustaining</p>
+    
+    <div class="grid4">
+        <div class="card phase">
+            <div class="icon">🌿</div>
+            <h4 class="zh">第一周：清</h4>
+            <h4 class="en">Week 1: Gentle</h4>
+            <p class="zh">清淡易消化，补充水分与基础营养</p>
+            <p class="en">Easily digestible, hydration & basic nutrition</p>
+        </div>
+        <div class="card phase">
+            <div class="icon">🍃</div>
+            <h4 class="zh">第二周：调</h4>
+            <h4 class="en">Week 2: Balance</h4>
+            <p class="zh">均衡营养，支持身体恢复</p>
+            <p class="en">Balanced meals for recovery support</p>
+        </div>
+        <div class="card phase">
+            <div class="icon">🌻</div>
+            <h4 class="zh">第三周：补</h4>
+            <h4 class="en">Week 3: Replenish</h4>
+            <p class="zh">优质蛋白，铁质钙质，补足元气</p>
+            <p class="en">Protein, iron & calcium for vitality</p>
+        </div>
+        <div class="card phase">
+            <div class="icon">🌾</div>
+            <h4 class="zh">第四周：固</h4>
+            <h4 class="en">Week 4: Sustain</h4>
+            <p class="zh">均衡饮食，养成健康习惯</p>
+            <p class="en">Balanced nutrition for long-term wellness</p>
+        </div>
+    </div>
+</section>
+
+<!-- 环境 -->
+<section id="env" style="background:#fff;border-radius:20px;margin:0 1rem;">
+    <h2 class="zh">中心环境</h2>
+    <p class="sub zh">温馨如家，舒适如精品酒店</p>
+    <h2 class="en">Our Environment</h2>
+    <p class="sub en">The Comfort of Home, The Elegance of Boutique Living</p>
+    
+    <div class="grid4">
+        <div class="env-item">🚪<br><span class="zh">接待大厅</span><span class="en">Reception</span></div>
+        <div class="env-item">👑<br><span class="zh">VIP套房</span><span class="en">VIP Suite</span></div>
+        <div class="env-item">🛏️<br><span class="zh">精品客房</span><span class="en">Premium Room</span></div>
+        <div class="env-item">☁️<br><span class="zh">温馨客房</span><span class="en">Standard Room</span></div>
+        <div class="env-item">💆<br><span class="zh">产康室</span><span class="en">Recovery Room</span></div>
+        <div class="env-item">🧸<br><span class="zh">新生儿室</span><span class="en">Newborn Room</span></div>
+        <div class="env-item">☕<br><span class="zh">休闲区</span><span class="en">Lounge</span></div>
+        <div class="env-item">💬<br><span class="zh">咨询区</span><span class="en">Consultation</span></div>
+    </div>
+</section>
+
+<!-- 套餐 -->
+<section id="packages">
+    <h2 class="zh">月子套餐</h2>
+    <p class="sub zh">28天精品月子体验</p>
+    <h2 class="en">Our Packages</h2>
+    <p class="sub en">28 Days of Personalised Postpartum Care</p>
+    
+    <div class="grid3">
+        <div class="pkg-card featured">
+            <div class="tag zh">热门</div>
+            <div class="tag en">Popular</div>
+            <h3 class="zh">👑 VIP 豪华套房</h3>
+            <h3 class="en">👑 VIP Luxury Suite</h3>
+            <div class="price">RM25,888 <small class="zh">原价 RM29,888</small><small class="en">Was RM29,888</small></div>
+            <ul>
+                <li class="zh">✓ 28天住宿 + 每日5餐</li>
+                <li class="zh">✓ 新生儿照护 + 产后评估</li>
+                <li class="zh">✓ 哺乳支持 + 10罐燕窝</li>
+                <li class="zh">✓ 多项产康护理包含在内</li>
+                <li class="en">✓ 28-Day stay + 5 meals daily</li>
+                <li class="en">✓ Newborn care + postnatal assessment</li>
+                <li class="en">✓ Lactation support + 10 bird's nest bottles</li>
+                <li class="en">✓ Full recovery treatments included</li>
+            </ul>
+            <a href="#contact" class="btn btn1 zh" style="width:100%;text-align:center;display:block;">立即咨询</a>
+            <a href="#contact" class="btn btn1 en" style="width:100%;text-align:center;display:block;">Enquire Now</a>
+        </div>
+        
+        <div class="pkg-card">
+            <h3 class="zh">🛏️ Premium 精品房</h3>
+            <h3 class="en">🛏️ Premium Room</h3>
+            <div class="price">RM22,888 <small class="zh">原价 RM26,888</small><small class="en">Was RM26,888</small></div>
+            <ul>
+                <li class="zh">✓ 28天住宿 + 每日5餐</li>
+                <li class="zh">✓ 新生儿照护 + 产后评估</li>
+                <li class="zh">✓ 哺乳支持 + 7罐燕窝</li>
+                <li class="en">✓ 28-Day stay + 5 meals daily</li>
+                <li class="en">✓ Newborn care + postnatal assessment</li>
+                <li class="en">✓ Lactation support + 7 bird's nest bottles</li>
+            </ul>
+            <a href="#contact" class="btn btn2 zh" style="width:100%;text-align:center;display:block;">了解详情</a>
+            <a href="#contact" class="btn btn2 en" style="width:100%;text-align:center;display:block;">View Details</a>
+        </div>
+        
+        <div class="pkg-card">
+            <h3 class="zh">☁️ Standard 温馨房</h3>
+            <h3 class="en">☁️ Standard Room</h3>
+            <div class="price zh">待确认</div>
+            <div class="price en">To Be Confirmed</div>
+            <ul>
+                <li class="zh">✓ 28天住宿 + 每日5餐</li>
+                <li class="zh">✓ 新生儿照护 + 基础评估</li>
+                <li class="zh">✓ 基础哺乳支持</li>
+                <li class="en">✓ 28-Day stay + 5 meals daily</li>
+                <li class="en">✓ Newborn care + basic assessment</li>
+                <li class="en">✓ Basic breastfeeding support</li>
+            </ul>
+            <a href="#contact" class="btn btn2 zh" style="width:100%;text-align:center;display:block;">预约咨询</a>
+            <a href="#contact" class="btn btn2 en" style="width:100%;text-align:center;display:block;">Enquire Now</a>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section>
+    <h2 class="zh">常见问题</h2>
+    <h2 class="en">FAQ</h2>
+    
+    <div class="faq-item">
+        <h4 class="zh">Q：配套是28天吗？</h4>
+        <h4 class="en">Q：Are packages for 28 days?</h4>
+        <p class="zh">是的，我们以28天为规划基础。</p>
+        <p class="en">Yes, packages are designed around a 28-day stay.</p>
+    </div>
+    <div class="faq-item">
+        <h4 class="zh">Q：每天几餐？</h4>
+        <h4 class="en">Q：How many meals daily?</h4>
+        <p class="zh">每日提供5餐营养膳食。</p>
+        <p class="en">5 nourishing meals are provided daily.</p>
+    </div>
+    <div class="faq-item">
+        <h4 class="zh">Q：可以预约参观吗？</h4>
+        <h4 class="en">Q：Can I book a tour?</h4>
+        <p class="zh">欢迎通过 WhatsApp 联系我们预约时间。</p>
+        <p class="en">Yes, please contact us via WhatsApp to schedule.</p>
+    </div>
+</section>
+
+<!-- 联系我们 -->
+<section id="contact">
+    <div class="contact-box">
+        <h2 class="zh">联系我们</h2>
+        <h2 class="en">Contact Us</h2>
+        <p class="sub zh">您的月子之旅，从这里开始</p>
+        <p class="sub en">Your Postpartum Journey Begins Here</p>
+        
+        <div class="contact-grid">
+            <div>
+                <h4 class="zh">📍 地址</h4>
+                <h4 class="en">📍 Address</h4>
+                <p>Johor Bahru, Malaysia<br><span style="color:var(--rose);" class="zh">详细地址待更新</span><span style="color:var(--rose);" class="en">Full address TBA</span></p>
+            </div>
+            <div>
+                <h4 class="zh">📞 电话</h4>
+                <h4 class="en">📞 Phone</h4>
+                <p style="color:var(--rose);">To Be Updated</p>
+            </div>
+            <div>
+                <h4>💬 WhatsApp</h4>
+                <p style="color:#25D366;">To Be Updated</p>
+            </div>
+            <div>
+                <h4 class="zh">🕐 营业时间</h4>
+                <h4 class="en">🕐 Hours</h4>
+                <p class="zh">待确认</p>
+                <p class="en">To Be Confirmed</p>
+            </div>
+        </div>
+        
+        <div style="margin-top:30px;">
+            <a href="#" class="btn btn1 zh">📅 预约参观</a>
+            <a href="#" class="btn btn2 zh">📋 咨询套餐</a>
+            <a href="#" class="btn btn3 zh">💬 WhatsApp 联系</a>
+            
+            <a href="#" class="btn btn1 en">📅 Book a Tour</a>
+            <a href="#" class="btn btn2 en">📋 Enquire Packages</a>
+            <a href="#" class="btn btn3 en">💬 Chat on WhatsApp</a>
+        </div>
+    </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+    <strong>Reborn Mama Postnatal Care Centre</strong><br>
+    <span class="zh">妈妈焕然新生，宝宝舒适安然 | 低密度 · 科学照护 · 专业产康</span>
+    <span class="en">Mom Reborn, Baby Comfort | Boutique Comfort · Evidence-Informed Care · Professional Postnatal Recovery</span>
+    <br><br>© 2026 Reborn Mama. All Rights Reserved.
+</footer>
+
+<!-- ===== FIXED JAVASCRIPT ===== -->
+<script>
+// Get elements
+const body = document.getElementById('page-body');
+const btnZh = document.getElementById('btn-zh');
+const btnEn = document.getElementById('btn-en');
+
+// Chinese mode
+btnZh.addEventListener('click', function() {
+    body.classList.remove('lang-en');
+    btnZh.classList.add('active');
+    btnEn.classList.remove('active');
+    console.log('Switched to Chinese ✅');
+});
+
+// English mode
+btnEn.addEventListener('click', function() {
+    body.classList.add('lang-en');
+    btnZh.classList.remove('active');
+    btnEn.classList.add('active');
+    console.log('Switched to English ✅');
+});
+</script>
+
 </body>
 </html>
